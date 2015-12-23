@@ -1,4 +1,4 @@
-package com.xfinity.vistest;
+package com.dapp.vistest;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
