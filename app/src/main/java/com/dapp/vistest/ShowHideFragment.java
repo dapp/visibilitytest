@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class ShowHideFragment extends Fragment {
-    boolean systemUiVisile = true;
+    boolean systemUiVisible = true;
     private TextView textView;
 
     @Nullable
@@ -20,7 +20,7 @@ public class ShowHideFragment extends Fragment {
         View view = inflater.inflate(R.layout.vis, container, false);
         final InsetReportingLinearLayout layout = (InsetReportingLinearLayout) view.findViewById(R.id.container);
         layout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        layout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
         textView =  (TextView) view.findViewById(R.id.textview);
         textView.setText("Show Hide Fragment");
@@ -30,20 +30,27 @@ public class ShowHideFragment extends Fragment {
             @Override
             public void onClick(final View v) {
                 final MainActivity mainActivity = (MainActivity)getActivity();
-                if (systemUiVisile) {
-                    mainActivity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                if (systemUiVisible) {
+                    mainActivity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                                                                  | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
                     mainActivity.getSupportActionBar().hide();
 
-                    systemUiVisile = false;
+                    systemUiVisible = false;
                 } else {
-                    getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                    getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
                     mainActivity.getSupportActionBar().show();
 
-                    systemUiVisile = true;
+                    systemUiVisible = true;
                 }
             }
         });
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
     }
 
     public void onInsetsChanged(Rect insets) {
